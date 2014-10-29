@@ -2,12 +2,6 @@
 
 from math import sqrt, fabs
 
-# rk4 problem 4 B&F No Lambda
-
-t = 0
-y = 1
-dt = 0.1
-
 def rk4(f, dt, t, y):
     k1 = dt*f(t,y)
     k2 = dt*f(t+dt/2, y+ k1/2)
@@ -15,24 +9,35 @@ def rk4(f, dt, t, y):
     k4 = dt*f(t+dt, y+k3)
     return y + (k1 + 2*k2 + 2*k3 + k4)/6
 
-def rkIter(f, steps):
-    prev = 1
+
+def getY2(t):
+    return (t**2/4.0 + 1)**2
+
+
+def getError(y, y2):
+    return fabs(y/y2 - 1.0)
+
+
+def printLine(t, y, error, delim=' '*5):
+    print 'y({:.1f}){}{:.7f}{}error: {}'\
+          .format(t, delim, y, delim, error)
+    
+
+def rkIter(f=lambda x, y: x*sqrt(y), steps=10, t=0, y=1, dt=0.1, output=True):
+    
+    if output is True:
+        printLine(t, y, 0)
 
     for i in xrange(0, steps):
-        x = t+dt*i
+        y = rk4(f, dt, t, y)
+        t += dt
+        y2 = getY2(t)
+        if output is True:
+            printLine(t, y, getError(y, y2))
 
-        res = rk4(f, dt, t+dt*(i-1), prev)
+    return y
 
-        y2 = (x*x/4.0 + 1)**2
-        print 'y({0:.1f}){1}{2:.7f}{3}error: {4:.7f}'.format(x, ' '*5, res, \
-                                                            ' '*5, fabs(res/y2-1))
-
-        prev = res
 
 if __name__=='__main__':
 
-    def myFun(x,y):
-        return x*sqrt(y)
-
-    steps = int(1+(y-t)/dt)
-    rkIter(myFun, steps)
+    rkIter()
