@@ -2,8 +2,8 @@
 
 from math import sqrt, fabs, exp
 
-t = 0
-y = 1
+#t = 0
+#y = 1
 #dt = 0.1
 
 #   This is the calculation of f
@@ -31,7 +31,7 @@ def printLine(t, y, error, delim=' '*5):
     
 #   Smashes it all together
 #   Here rk4 is defined with default arguments that will be called if no alternate arguments are given by the user
-def rk4(f=lambda a, b:(-t*y+(4*t)/y), steps=10, t=0, y=1, dt=0.1, output=True):
+def rk4(f=lambda a, b:(-a*b+(4*a)/b), steps=10, t=0, y=1, dt=0.1, output=True):
     
     if output is True:
         printLine(t, y, 0)
